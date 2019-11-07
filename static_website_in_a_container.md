@@ -113,5 +113,13 @@ So let's create them
 [igou]$ kubectl create igou-blog-ingress.yml
 ```
 
+A lazy hack to redeploy:
+
+```
+kubectl patch deploy igou-website -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+```
+
+after pushing a new image
+
 
 :wala:
