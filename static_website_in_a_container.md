@@ -113,13 +113,12 @@ So let's create them
 [igou]$ kubectl create igou-blog-ingress.yml
 ```
 
-A lazy hack to redeploy:
+A lazy hack to remake the pods and pull the latest image:
 
 ```
 kubectl patch deploy igou-website -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
 ```
 
-after pushing a new image
-
+Ideally, some CI/CD will be in place. You can only overengineer a static website so much in a week. We'll see what I come up with.
 
 :wala:
