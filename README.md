@@ -82,7 +82,7 @@ cert-manager           cert-manager-webhook-c67fbc858-88292          1/1     Run
 
 The entire deployment takes about 5 minutes on 4 t2.micros.
 
-K3s ships with [Traefik](www.google.com), and a local storage provisioner. Local storage isn't very useful here, getting the EBS plugin working is on the checklist down the road. I added [cert-manager](www.google.com) a tool that unexpectedly blew my mind. How easy handling certificates has become is incredible.
+K3s ships with [Traefik](https://traefik.io), and a local storage provisioner. Local storage isn't very useful here, getting the EBS plugin working is on the checklist down the road. I added [cert-manager](https://github.com/jetstack/cert-manager) a tool that unexpectedly blew my mind. How easy handling certificates has become is incredible.
 
 ## Deploying the dashboard using cert-manager and traefik ingress
 
