@@ -17,11 +17,11 @@ COPY public /usr/share/nginx/html
 To build it
 
 ```
-docker build -t igou.io-nginx .
-docker run --name igou.io-nginx -d -p 8080:80 igou.io-nginx
-docker ps
-docker commit [id] quay.io/igou/igou.io-nginx
-docker push quay.io/igou/igou.io-nginx
+[igou]$ docker build -t igou.io-nginx .
+[igou]$ docker run --name igou.io-nginx -d -p 8080:80 igou.io-nginx
+[igou]$ docker ps
+[igou]$ docker commit [id] quay.io/igou/igou.io-nginx
+[igou]$ docker push quay.io/igou/igou.io-nginx
 ```
 
 To deploy it on Kubernetes:
@@ -104,5 +104,14 @@ items:
             serviceName: igou-website
             servicePort: 80
 ```
+
+So let's create them
+
+```
+[igou]$ kubectl create igou-blog-deployment.yml
+[igou]$ kubectl create igou-blog-service.yml
+[igou]$ kubectl create igou-blog-ingress.yml
+```
+
 
 :wala:
