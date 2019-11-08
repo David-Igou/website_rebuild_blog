@@ -121,4 +121,98 @@ kubectl patch deploy igou-website -p "{\"spec\":{\"template\":{\"metadata\":{\"a
 
 Ideally, some CI/CD will be in place. You can only overengineer a static website so much in a week. We'll see what I come up with.
 
+# certs
+
+```
+[igou@igou-rh manifests]$ cat igou-blog-cert.yml 
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: igou-website-certificate
+  namespace: igou
+spec:
+  commonName: igou.io
+  dnsNames:
+  - igou.io
+  - www.igou.io
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: igou-blog-acme-certificate
+```
+
+Create the manifest and wait until it's READY
+
+```[igou@igou-rh manifests]$ kubectl get cert -n igou
+NAME                       READY   SECRET                       AGE
+igou-website-certificate   True    igou-blog-acme-certificate   17m
+[igou@igou-rh manifests]$ kubectl describe cert -n igou
+Name:         igou-website-certificate
+Namespace:    igou
+Labels:       <none>
+Annotations:  <none>
+API Version:  cert-manager.io/v1alpha2
+Kind:         Certificate
+Metadata:
+  Creation Timestamp:  2019-11-08T16:29:44Z
+  Generation:          1
+  Resource Version:    313630
+  Self Link:           /apis/cert-manager.io/v1alpha2/namespaces/igou/certificates/igou-website-certificate
+  UID:                 ed8ad018-5791-4da2-9890-ff4343
+Spec:
+  Common Name:  igou.io
+  Dns Names:
+    igou.io
+    www.igou.io
+  Issuer Ref:
+    Kind:       ClusterIssuer
+    Name:       letsencrypt-prod
+  Secret Name:  igou-blog-acme-certificate
+Status:
+  Conditions:
+    Last Transition Time:  2019-11-08T16:30:13Z
+    Message:               Certificate is up to date and has not expired
+    Reason:                Ready
+    Status:                True
+    Type:                  Ready
+  Not After:               2020-02-06T15:30:12Z
+Events:
+  Type    Reason        Age   From          Message
+  ----    ------        ----  ----          -------
+  Normal  GeneratedKey  17m   cert-manager  Generated a new private key
+  Normal  Requested     17m   cert-manager  Created new CertificateRequest resource "igou-website-certificate-2819406579"
+  Normal  Issued        17m   cert-manager  Certificate issued successfully
+```
+
+Make a real ingress:
+
+```
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+  generation: 5
+  labels:
+    igou-app: website
+  name: igou-website
+  namespace: igou
+spec:
+  rules:
+  - host: igou.io
+    http:
+      paths:
+      - backend:
+          serviceName: igou-website
+          servicePort: 80
+  - host: www.igou.io
+    http:
+      paths:
+      - backend:
+          serviceName: igou-website
+          servicePort: 80
+  tls:
+  - secretName: igou-blog-acme-certificate
+```
+
 :wala:
