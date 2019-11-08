@@ -192,7 +192,6 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/redirect-entry-point: https
-  generation: 5
   labels:
     igou-app: website
   name: igou-website
