@@ -36,7 +36,7 @@ metadata:
   labels:
     igou-app: website
 spec:
-  replicas: 1
+  replicas: 3 #Don't talk to me unless your static website is HA
   selector:
     matchLabels:
       igou-app: website
